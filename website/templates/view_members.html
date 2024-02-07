@@ -1,0 +1,47 @@
+{% extends "base.html" %} {% block title %}View Members{% endblock %} {% block content
+    %}
+    <h1>Member Data</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Address</th>
+                <!-- Add more table headers for other member properties -->
+            </tr>
+        </thead>
+        <tbody id="memberData">
+            <!-- Data will be dynamically inserted here -->
+        </tbody>
+    </table>
+
+    <script>
+        // Fetch data from Flask route
+        fetch('/view-members')
+            .then(response => response.json())
+            .then(data => {
+                const memberData = document.getElementById('memberData');
+
+                // Loop through each member in the data
+                data.forEach(member => {
+                    // Create a new row for each member
+                    const row = document.createElement('tr');
+
+                    // Populate the row with member data
+                    row.innerHTML = `
+                        <td>${member.id}</td>
+                        <td>${member.first_name}</td>
+                        <td>${member.last_name}</td>
+                        <td>${member.address}</td>
+                        <!-- Add more table cells for other member properties -->
+                    `;
+
+                    // Append the row to the table body
+                    memberData.appendChild(row);
+                });
+            })
+            .catch(error => console.error('Error fetching member data:', error));
+    </script>
+
+{% endblock %}
